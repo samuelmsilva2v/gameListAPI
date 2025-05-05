@@ -37,14 +37,8 @@ public class GameDomainServiceImpl implements GameDomainService {
 	public GameResponseDto editGame(GameRequestDto request, UUID id) {
 
 		var game = gameRepository.findById(id).get();
-
-		game.setName(request.getName());
-		game.setDescription(request.getDescription());
-		game.setGenre(request.getGenre());
-		game.setPlatform(request.getPlatform());
-		game.setPublisher(request.getPublisher());
-		game.setReleaseDate(request.getReleaseDate());
-		game.setImageUrl(request.getImageUrl());
+		
+		modelMapper.map(request, game);
 
 		gameRepository.save(game);
 

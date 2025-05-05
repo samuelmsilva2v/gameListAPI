@@ -3,6 +3,8 @@ package com.example.demo.domain.models.entities;
 import java.util.Date;
 import java.util.UUID;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -31,8 +33,8 @@ public class Game {
 	private String publisher;
 	
 	@Column(nullable = false)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date releaseDate;
 	
-	@Column(nullable = false)
 	private String imageUrl;
 }

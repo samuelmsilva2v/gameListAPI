@@ -1,7 +1,5 @@
 package com.example.demo.application.dtos;
 
-import java.util.Date;
-
 import lombok.Data;
 
 @Data
@@ -12,6 +10,6 @@ public class GameRequestDto {
 	private String genre;
 	private String platform;
 	private String publisher;
-	private Date releaseDate;
+	private String releaseDate; // dd/MM/yyyy
 	private String imageUrl;
 }
