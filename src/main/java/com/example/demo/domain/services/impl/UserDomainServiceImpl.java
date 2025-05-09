@@ -14,6 +14,7 @@ import com.example.demo.application.dtos.RegisterUserResponseDto;
 import com.example.demo.domain.models.entities.User;
 import com.example.demo.domain.models.enums.Role;
 import com.example.demo.domain.services.interfaces.UserDomainService;
+import com.example.demo.infrastructure.components.JwtTokenComponent;
 import com.example.demo.infrastructure.components.SHA256Component;
 import com.example.demo.infrastructure.repositories.UserRepository;
 
@@ -28,6 +29,9 @@ public class UserDomainServiceImpl implements UserDomainService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private JwtTokenComponent jwtTokenComponent;
 
 	@Override
 	public RegisterUserResponseDto registerUser(RegisterUserRequestDto request) {
@@ -50,9 +54,13 @@ public class UserDomainServiceImpl implements UserDomainService {
 	@Override
 	public AuthenticateUserResponseDto authenticateUser(AuthenticateUserRequestDto request) {
 		
+		var user = userRepository.findByEmailAndPassword(request.getEmail(),
+				sha256Component.encrypt(request.getPassword()));
 		
+		var response = modelMapper.map(user, AuthenticateUserResponseDto.class);
+		response.setToken(jwtTokenComponent.getToken(user));
 		
-		return null;
+		return response;
 	}
 
 }

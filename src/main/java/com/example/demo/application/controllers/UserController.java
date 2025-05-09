@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.dtos.AuthenticateUserRequestDto;
+import com.example.demo.application.dtos.AuthenticateUserResponseDto;
 import com.example.demo.application.dtos.RegisterUserRequestDto;
 import com.example.demo.application.dtos.RegisterUserResponseDto;
 import com.example.demo.domain.services.interfaces.UserDomainService;
@@ -21,16 +23,17 @@ public class UserController {
 	@Autowired
 	private UserDomainService userDomainService;
 
-	@Operation(summary = "Serviço para registrar um novo usuário")
+	@Operation(summary = "Serviço para registrar um novo usuário.")
 	@PostMapping("/register")
 	public ResponseEntity<RegisterUserResponseDto> register(@RequestBody @Valid RegisterUserRequestDto request) {
 		var response = userDomainService.registerUser(request);
 		return ResponseEntity.ok(response);
 	}
 	
-	@Operation(summary = "Serviço para autenticar um novo usuário")
+	@Operation(summary = "Serviço para autenticar um novo usuário.")
 	@PostMapping("/login")
-	public void authenticate() {
-		// TODO
+	public ResponseEntity<AuthenticateUserResponseDto> authenticate(@RequestBody @Valid AuthenticateUserRequestDto request) {
+		var response = userDomainService.authenticateUser(request);
+		return ResponseEntity.ok(response);
 	}
 }
