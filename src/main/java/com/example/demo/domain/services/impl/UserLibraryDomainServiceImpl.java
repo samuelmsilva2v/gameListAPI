@@ -141,5 +141,4 @@ public class UserLibraryDomainServiceImpl implements UserLibraryDomainService {
 
 		return response;
 	}
-
 }

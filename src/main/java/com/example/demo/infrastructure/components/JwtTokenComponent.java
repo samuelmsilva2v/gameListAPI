@@ -19,4 +19,6 @@ public class JwtTokenComponent {
 				.setExpiration(new Date(System.currentTimeMillis() + 1800000))
 				.signWith(SignatureAlgorithm.HS256, secretKey).compact();
 	}
+	
+	
 }
