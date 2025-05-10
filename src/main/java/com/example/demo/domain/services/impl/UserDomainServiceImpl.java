@@ -12,10 +12,12 @@ import com.example.demo.application.dtos.AuthenticateUserResponseDto;
 import com.example.demo.application.dtos.RegisterUserRequestDto;
 import com.example.demo.application.dtos.RegisterUserResponseDto;
 import com.example.demo.domain.models.entities.User;
+import com.example.demo.domain.models.entities.UserLibrary;
 import com.example.demo.domain.models.enums.Role;
 import com.example.demo.domain.services.interfaces.UserDomainService;
 import com.example.demo.infrastructure.components.JwtTokenComponent;
 import com.example.demo.infrastructure.components.SHA256Component;
+import com.example.demo.infrastructure.repositories.UserLibraryRepository;
 import com.example.demo.infrastructure.repositories.UserRepository;
 
 @Service
@@ -23,6 +25,9 @@ public class UserDomainServiceImpl implements UserDomainService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private UserLibraryRepository userLibraryRepository;
 	
 	@Autowired
 	private SHA256Component sha256Component;
@@ -44,6 +49,12 @@ public class UserDomainServiceImpl implements UserDomainService {
 		user.setRole(Role.USER);
 		
 		userRepository.save(user);
+		
+		var userLibrary = new UserLibrary();
+		userLibrary.setId(UUID.randomUUID());
+		userLibrary.setUser(user);
+		
+		userLibraryRepository.save(userLibrary);
 		
 		var response = modelMapper.map(user, RegisterUserResponseDto.class);
 		response.setCreatedAt(Instant.now());

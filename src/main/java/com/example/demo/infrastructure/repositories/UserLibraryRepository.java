@@ -8,4 +8,5 @@ import com.example.demo.domain.models.entities.UserLibrary;
 
 public interface UserLibraryRepository extends JpaRepository<UserLibrary, UUID> {
 
+	UserLibrary findByUserId(UUID userId);
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class GameRequestDto {
 
-	private String name;
+	private String title;
 	private String description;
 	private String genre;
 	private String platform;

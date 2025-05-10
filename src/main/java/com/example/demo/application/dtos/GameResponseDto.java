@@ -8,7 +8,7 @@ import lombok.Data;
 public class GameResponseDto {
 
 	private UUID id;
-	private String name;
+	private String title;
 	private String description;
 	private String genre;
 	private String platform;
