@@ -9,4 +9,6 @@ import com.example.demo.domain.models.entities.User;
 public interface UserRepository extends JpaRepository<User, UUID> {
 
 	User findByEmailAndPassword(String email, String password);
+	
+	boolean existsByEmail(String email);
 }

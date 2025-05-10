@@ -8,4 +8,5 @@ import com.example.demo.domain.models.entities.Game;
 
 public interface GameRepository extends JpaRepository<Game, UUID> {
 
+	boolean existsByTitle(String title);
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.application.dtos.GameRequestDto;
 import com.example.demo.application.dtos.GameResponseDto;
+import com.example.demo.domain.exceptions.ResourceNotFoundException;
 import com.example.demo.domain.models.entities.Game;
 import com.example.demo.domain.services.interfaces.GameDomainService;
 import com.example.demo.infrastructure.repositories.GameRepository;
@@ -25,6 +26,9 @@ public class GameDomainServiceImpl implements GameDomainService {
 	@Override
 	public GameResponseDto addGame(GameRequestDto request) {
 
+		if (gameRepository.existsByTitle(request.getTitle()))
+			throw new IllegalArgumentException("Já existe um jogo registrado com esse título. Tente outro.");
+
 		var game = modelMapper.map(request, Game.class);
 		game.setId(UUID.randomUUID());
 
@@ -36,8 +40,11 @@ public class GameDomainServiceImpl implements GameDomainService {
 	@Override
 	public GameResponseDto editGame(GameRequestDto request, UUID id) {
 
+		if (gameRepository.existsByTitle(request.getTitle()))
+			throw new IllegalArgumentException("Já existe um jogo registrado com esse título. Tente outro.");
+
 		var game = gameRepository.findById(id).get();
-		
+
 		modelMapper.map(request, game);
 
 		gameRepository.save(game);
@@ -47,6 +54,9 @@ public class GameDomainServiceImpl implements GameDomainService {
 
 	@Override
 	public GameResponseDto deleteGame(UUID id) {
+
+		if (!gameRepository.existsById(id))
+			throw new ResourceNotFoundException("Jogo com ID " + id + " não encontrado.");
 
 		var game = gameRepository.findById(id).get();
 
@@ -58,6 +68,9 @@ public class GameDomainServiceImpl implements GameDomainService {
 	@Override
 	public GameResponseDto getGameById(UUID id) {
 
+		if (!gameRepository.existsById(id))
+			throw new ResourceNotFoundException("Jogo com ID " + id + " não encontrado.");
+
 		var game = gameRepository.findById(id).get();
 
 		return modelMapper.map(game, GameResponseDto.class);
@@ -65,7 +78,7 @@ public class GameDomainServiceImpl implements GameDomainService {
 
 	@Override
 	public List<GameResponseDto> getAllGames() {
-		
+
 		return gameRepository.findAll().stream().map(game -> modelMapper.map(game, GameResponseDto.class)).toList();
 	}
 

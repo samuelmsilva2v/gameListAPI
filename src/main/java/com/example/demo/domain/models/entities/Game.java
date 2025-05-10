@@ -19,7 +19,7 @@ public class Game {
 	@Id
 	private UUID id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String title;
 
 	@Column(nullable = false)

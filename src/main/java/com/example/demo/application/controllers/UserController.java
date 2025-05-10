@@ -23,14 +23,14 @@ public class UserController {
 	@Autowired
 	private UserDomainService userDomainService;
 
-	@Operation(summary = "Serviço para registrar um novo usuário.")
+	@Operation(summary = "Serviço para registrar um novo usuário.", description = "Register a new user")
 	@PostMapping("/register")
 	public ResponseEntity<RegisterUserResponseDto> register(@RequestBody @Valid RegisterUserRequestDto request) {
 		var response = userDomainService.registerUser(request);
 		return ResponseEntity.ok(response);
 	}
 	
-	@Operation(summary = "Serviço para autenticar um novo usuário.")
+	@Operation(summary = "Serviço para autenticar um novo usuário.", description = "Authenticate a user")
 	@PostMapping("/login")
 	public ResponseEntity<AuthenticateUserResponseDto> authenticate(@RequestBody @Valid AuthenticateUserRequestDto request) {
 		var response = userDomainService.authenticateUser(request);
