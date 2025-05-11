@@ -1,0 +1,43 @@
+services:
+ postgres:
+  image: postgres:latest
+  container_name: postgres_gamelist
+  restart: always
+  environment:
+   POSTGRES_USER: gamelist_user
+   POSTGRES_PASSWORD: gamelist_pass
+   POSTGRES_DB: gamelist_db
+  ports:
+   - "5438:5432"
+  volumes:
+   - postgres_data:/var/lib/postgresql/data
+
+ mongodb:
+  image: mongo:latest
+  container_name: mongodb_gamelist
+  restart: always
+  environment:
+   MONGO_INITDB_ROOT_USERNAME: gamelist_user
+   MONGO_INITDB_ROOT_PASSWORD: gamelist_pass
+  ports:
+   - "27018:27017"
+  volumes:
+   - mongo_data:/data/db
+   
+ rabbitmq:
+  image: rabbitmq:3-management
+  container_name: rabbitmq_apifinancas
+  restart: always
+  environment:
+   RABBITMQ_DEFAULT_USER: guest
+   RABBITMQ_DEFAULT_PASS: guest
+  ports:
+   - "5672:5672"
+   - "15672:15672"
+  volumes:
+   - rabbitmq_data:/var/lib/rabbitmq
+   
+volumes:
+ postgres_data:
+ mongo_data:
+ rabbitmq_data:
