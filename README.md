@@ -13,10 +13,12 @@ API RESTful desenvolvida em Java com Spring Boot que permite que usuários mante
 - Spring Security com JWT
 - Spring Data JPA
 - PostgreSQL
+- MongoDB
 - Maven
 - Lombok
 - ModelMapper
-- PlantUML (documentação)
+- RabbitMQ
+- MailHog
 - Docker (em breve)
 
 ## Estrutura DDD
