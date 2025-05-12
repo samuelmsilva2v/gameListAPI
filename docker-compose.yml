@@ -26,7 +26,7 @@ services:
    
  rabbitmq:
   image: rabbitmq:3-management
-  container_name: rabbitmq_apifinancas
+  container_name: rabbitmq_gamelist
   restart: always
   environment:
    RABBITMQ_DEFAULT_USER: guest
@@ -39,7 +39,7 @@ services:
    
  mailhog:
   image: mailhog/mailhog:latest
-  container_name: mailhog_apifinancas
+  container_name: mailhog_gamelist
   restart: always
   ports:
    - "1025:1025"
