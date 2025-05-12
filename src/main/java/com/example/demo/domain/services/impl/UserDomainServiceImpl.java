@@ -16,6 +16,7 @@ import com.example.demo.domain.models.entities.UserLibrary;
 import com.example.demo.domain.models.enums.Role;
 import com.example.demo.domain.services.interfaces.UserDomainService;
 import com.example.demo.infrastructure.components.JwtTokenComponent;
+import com.example.demo.infrastructure.components.RabbitMQProducerComponent;
 import com.example.demo.infrastructure.components.SHA256Component;
 import com.example.demo.infrastructure.repositories.UserLibraryRepository;
 import com.example.demo.infrastructure.repositories.UserRepository;
@@ -37,6 +38,9 @@ public class UserDomainServiceImpl implements UserDomainService {
 
 	@Autowired
 	private JwtTokenComponent jwtTokenComponent;
+	
+	@Autowired
+	private RabbitMQProducerComponent rabbitMQProducerComponent;
 
 	@Override
 	public RegisterUserResponseDto registerUser(RegisterUserRequestDto request) {
@@ -52,6 +56,8 @@ public class UserDomainServiceImpl implements UserDomainService {
 		user.setRole(Role.USER);
 
 		userRepository.save(user);
+		
+		rabbitMQProducerComponent.sendMessage(user);
 
 		var userLibrary = new UserLibrary();
 		userLibrary.setId(UUID.randomUUID());
