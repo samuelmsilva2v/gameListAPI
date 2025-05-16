@@ -5,33 +5,34 @@
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/samuelmsilva2v/gameListAPI?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/samuelmsilva2v/gameListAPI?style=for-the-badge)
 
-API RESTful desenvolvida em Java com Spring Boot que permite que usuários mantenham sua própria biblioteca de jogos, com autenticação JWT, controle de acesso por roles, e organização do código seguindo os princípios de Domain-Driven Design (DDD).
+API RESTful desenvolvida em Java 21 com Spring Boot que permite a usuários autenticados manterem sua própria biblioteca de jogos. Conta com autenticação JWT, controle de acesso por roles (USER e ADMIN), mensageria com RabbitMQ, envio de e-mails via MailHog, logs persistidos no MongoDB e arquitetura baseada em Domain-Driven Design (DDD)
 
 ## Tecnologias e Ferramentas
-- Java 21
-- Spring Boot
-- Spring Security com JWT
-- Spring Data JPA
-- PostgreSQL
-- MongoDB
-- Maven
-- Lombok
-- ModelMapper
-- RabbitMQ
-- MailHog
-- Docker (em breve)
+* Java 21
+* Spring Boot
+* Spring Security (JWT)
+* Spring Data JPA & MongoDB
+* PostgreSQL
+* RabbitMQ
+* MailHog
+* Docker
+* ModelMapper
+* Lombok
+* Maven
 
-## Estrutura DDD
+## Arquitetura - Domain-Driven Design (DDD)
 O projeto segue os princípios de DDD, com separação em camadas de:
 - `domain`: entidades, enums e regras de negócio
 - `application`: controllers e DTOs
 - `infrastructure`: repositórios e configurações técnicas
 
 ## Segurança
-- Autenticação com JWT
-- Autorização baseada em roles (`USER`, `ADMIN`)
+- Autenticação com JWT (token)
+- Autorização baseada em roles:
+  - `USER` → Acesso e gerenciamento da própria biblioteca
+  - `ADMIN` → Gerenciamento completo de jogos
 - Filtros personalizados de autenticação e autorização
-- Endpoints públicos e protegidos
+- Endpoints protegidos e públicos com controle refinado
 
 ## Funcionalidades
 * Autenticação & Autorização
@@ -66,3 +67,33 @@ O projeto segue os princípios de DDD, com separação em camadas de:
 | DELETE | `/api/user-library/{userId}`                      | Exclui um jogo a biblioteca do usuário        |
 
 🔒 Todas as operações com biblioteca exigem que o usuário esteja autenticado e só possa manipular sua própria biblioteca.
+
+* Notificações por e-mail: envio de e-mails de boas-vindas com MailHog
+
+* Mensageria: logs e notificações assíncronas via RabbitMQ
+
+* Logs de ações: registrados no MongoDB (como adição/remoção de jogos)
+
+* Ambiente pronto para Docker e Deploy
+
+## Como executar localmente
+```bash
+# Clone o projeto
+git clone https://github.com/samuelmsilva2v/gameListAPI.git
+cd gameListAPI
+
+# Suba os containers (Postgres, MongoDB, RabbitMQ, MailHog)
+docker-compose up -d
+
+# Compile o projeto
+./mvnw clean install
+
+# Rode a aplicação
+./mvnw spring-boot:run
+```
+
+## Futuras melhorias
+* Interface frontend com Angular ou React
+* Upload de imagens para os jogos
+* Avaliação dos jogos com comentários e notas
+* Sistema de favoritos
