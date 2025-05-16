@@ -17,14 +17,14 @@ public class LogGamesComponent {
 	
 	public void logGame(String game, String operation, String details) {
 		
-		var logGame = new LogGames();
-		logGame.setId(UUID.randomUUID());
-		logGame.setCreatedAt(new Date());
-		logGame.setGame(game);
-		logGame.setOperation(operation);
-		logGame.setDetails(details);
+		var log = new LogGames();
+		log.setId(UUID.randomUUID());
+		log.setCreatedAt(new Date());
+		log.setGame(game);
+		log.setOperation(operation);
+		log.setDetails(details);
 		
-		logGamesRepository.save(logGame);
+		logGamesRepository.save(log);
 	}
 	
 	public enum Operation {

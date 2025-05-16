@@ -17,6 +17,8 @@ import com.example.demo.domain.models.enums.Role;
 import com.example.demo.domain.services.interfaces.UserDomainService;
 import com.example.demo.infrastructure.components.JwtTokenComponent;
 import com.example.demo.infrastructure.components.LogUsersComponent;
+import com.example.demo.infrastructure.components.LogUsersLibraryComponent;
+import com.example.demo.infrastructure.components.LogUsersLibraryComponent.Operation;
 import com.example.demo.infrastructure.components.RabbitMQProducerComponent;
 import com.example.demo.infrastructure.components.SHA256Component;
 import com.example.demo.infrastructure.repositories.UserLibraryRepository;
@@ -39,12 +41,15 @@ public class UserDomainServiceImpl implements UserDomainService {
 
 	@Autowired
 	private JwtTokenComponent jwtTokenComponent;
-	
+
 	@Autowired
 	private RabbitMQProducerComponent rabbitMQProducerComponent;
-	
+
 	@Autowired
 	private LogUsersComponent logUsersComponent;
+
+	@Autowired
+	private LogUsersLibraryComponent logUsersLibraryComponent;
 
 	@Override
 	public RegisterUserResponseDto registerUser(RegisterUserRequestDto request) {
@@ -60,7 +65,7 @@ public class UserDomainServiceImpl implements UserDomainService {
 		user.setRole(Role.USER);
 
 		userRepository.save(user);
-		
+
 		rabbitMQProducerComponent.sendMessage(user);
 		logUsersComponent.saveLog(user.getEmail(), "Usuário cadastrado com sucesso.");
 
@@ -69,6 +74,8 @@ public class UserDomainServiceImpl implements UserDomainService {
 		userLibrary.setUser(user);
 
 		userLibraryRepository.save(userLibrary);
+		logUsersLibraryComponent.saveLog(user.getName(), Operation.CREATE_LIBRARY.toString(),
+				"Biblioteca do jogador " + user.getName() + " criada com sucesso.");
 
 		var response = modelMapper.map(user, RegisterUserResponseDto.class);
 		response.setCreatedAt(Instant.now());

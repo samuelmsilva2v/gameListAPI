@@ -11,15 +11,15 @@ import com.example.demo.infrastructure.repositories.LogUsersRepository;
 
 @Component
 public class LogUsersComponent {
-	
+
 	@Autowired
 	private LogUsersRepository logUsersRepository;
-	
+
 	public void saveLog(String user, String details) {
-		
+
 		var log = new LogUsers();
-		
-        log.setId(UUID.randomUUID());
+
+		log.setId(UUID.randomUUID());
 		log.setUser(user);
 		log.setDetails(details);
 		log.setCreatedAt(new Date());

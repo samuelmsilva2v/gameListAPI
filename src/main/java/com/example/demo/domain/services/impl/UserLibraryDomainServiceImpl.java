@@ -12,6 +12,8 @@ import com.example.demo.domain.exceptions.GameAlreadyInLibraryException;
 import com.example.demo.domain.exceptions.GameNotInLibraryException;
 import com.example.demo.domain.exceptions.ResourceNotFoundException;
 import com.example.demo.domain.services.interfaces.UserLibraryDomainService;
+import com.example.demo.infrastructure.components.LogUsersLibraryComponent;
+import com.example.demo.infrastructure.components.LogUsersLibraryComponent.Operation;
 import com.example.demo.infrastructure.repositories.GameRepository;
 import com.example.demo.infrastructure.repositories.UserLibraryRepository;
 
@@ -23,6 +25,9 @@ public class UserLibraryDomainServiceImpl implements UserLibraryDomainService {
 
 	@Autowired
 	private GameRepository gameRepository;
+
+	@Autowired
+	private LogUsersLibraryComponent logUsersLibraryComponent;
 
 	@Override
 	public UserLibraryResponseDto getUserLibrary(UUID userId) {
@@ -97,6 +102,9 @@ public class UserLibraryDomainServiceImpl implements UserLibraryDomainService {
 			return gameResponse;
 
 		}).toList());
+		
+		logUsersLibraryComponent.saveLog(userLibrary.getUser().getName(), Operation.ADD_GAME_TO_LIBRARY.toString(),
+				"Jogo adicionado da biblioteca do jogador " + userLibrary.getUser().getName() + " com sucesso.");
 
 		return response;
 	}
@@ -108,9 +116,9 @@ public class UserLibraryDomainServiceImpl implements UserLibraryDomainService {
 
 		var game = gameRepository.findById(gameId)
 				.orElseThrow(() -> new ResourceNotFoundException("Jogo com ID" + gameId + " não encontrado."));
-		
+
 		if (!userLibrary.getGames().contains(game))
-		    throw new GameNotInLibraryException("O jogo não está na biblioteca.");
+			throw new GameNotInLibraryException("O jogo não está na biblioteca.");
 
 		userLibrary.getGames().remove(game);
 
@@ -138,6 +146,9 @@ public class UserLibraryDomainServiceImpl implements UserLibraryDomainService {
 			return gameResponse;
 
 		}).toList());
+		
+		logUsersLibraryComponent.saveLog(userLibrary.getUser().getName(), Operation.REMOVE_GAME_FROM_LIBRARY.toString(),
+				"Jogo removido da biblioteca do jogador " + userLibrary.getUser().getName() + " com sucesso.");
 
 		return response;
 	}
