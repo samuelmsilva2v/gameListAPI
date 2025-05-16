@@ -12,6 +12,8 @@ import com.example.demo.application.dtos.GameResponseDto;
 import com.example.demo.domain.exceptions.ResourceNotFoundException;
 import com.example.demo.domain.models.entities.Game;
 import com.example.demo.domain.services.interfaces.GameDomainService;
+import com.example.demo.infrastructure.components.LogGamesComponent;
+import com.example.demo.infrastructure.components.LogGamesComponent.Operation;
 import com.example.demo.infrastructure.repositories.GameRepository;
 
 @Service
@@ -23,6 +25,9 @@ public class GameDomainServiceImpl implements GameDomainService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Autowired
+	private LogGamesComponent logGamesComponent;
+
 	@Override
 	public GameResponseDto addGame(GameRequestDto request) {
 
@@ -33,6 +38,9 @@ public class GameDomainServiceImpl implements GameDomainService {
 		game.setId(UUID.randomUUID());
 
 		gameRepository.save(game);
+		
+		logGamesComponent.logGame(game.getTitle(), Operation.ADD.toString(),
+				"Jogo adicionado com sucesso.");
 
 		return modelMapper.map(game, GameResponseDto.class);
 	}
@@ -48,6 +56,8 @@ public class GameDomainServiceImpl implements GameDomainService {
 		modelMapper.map(request, game);
 
 		gameRepository.save(game);
+		
+		logGamesComponent.logGame(game.getTitle(), Operation.UPDATE.toString(), "Jogo atualizado com sucesso.");
 
 		return modelMapper.map(game, GameResponseDto.class);
 	}
@@ -61,6 +71,8 @@ public class GameDomainServiceImpl implements GameDomainService {
 		var game = gameRepository.findById(id).get();
 
 		gameRepository.delete(game);
+		
+		logGamesComponent.logGame(game.getTitle(), Operation.DELETE.toString(), "Jogo excluído com sucesso.");
 
 		return modelMapper.map(game, GameResponseDto.class);
 	}
